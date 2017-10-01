@@ -10,7 +10,7 @@ import numpy as np
 # Output weight is set to 1
 # Linear model is used because of the nature of the problem
 def step(s, x, U, W):
-    return x * U + s * W
+	return x * U + s * W
 	
 # Training using backpropagation through time
 # The forward pass
