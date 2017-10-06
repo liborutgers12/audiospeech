@@ -50,41 +50,46 @@ def audioPowerSpectr(audio, samplingFreq, plotEnabled):
 		plt.show()
 	return power
 
-# Plot the power spectrum for segments of the audio
+
+def audioSpectrogram(audio, samplingFreq, fftLength=512, overlapRatio=0.5, plotEnabled=True):
+	# Get the power spectrum for segments of the audio	
+	numSegs = np.floor((len(audio)-fftLength)/(fftLength*overlapRatio)) + 1
+	audioSpectrogram = np.zeros((fftLength/2 + 1, numSegs))
+	for idx in np.arange(0, len(audio) - fftLength, fftLength * overlapRatio):
+		audioSeg = audio[idx:idx+fftLength]	
+		audioSpectrogram[:,int(idx / (fftLength * overlapRatio))] = audioPowerSpectr	(audioSeg, samplingFreq, False)
+
+	from mpl_toolkits.mplot3d import Axes3D	
+	import matplotlib.cm as cm	
+
+	t = np.arange(0, len(audio) - fftLength, fftLength * overlapRatio) / samplingFreq
+	f = np.arange(0, fftLength/2 + 1) / float(fftLength) * samplingFreq / 1000.0
+	tGrid, fGrid = np.meshgrid(t,f)
+	
+	if False:
+		fig = plt.figure(1)
+		ax = fig.add_subplot(111, projection='3d')
+		ax.plot_surface(tGrid,fGrid, np.abs(audioSpectrogram), cmap=cm.jet, linewidth=0)
+		ax.view_init(azim=-90, elev=90)
+
+		fig = plt.figure(2)
+		ax2 = fig.add_subplot(111)
+		ax2.specgram(audio)
+		ax2.axis('tight')
+
+	if plotEnabled:
+		fig = plt.figure()
+		ax3 = fig.add_subplot(111)
+		ax3.pcolormesh(tGrid,fGrid, 10*np.log10(np.abs(audioSpectrogram)), cmap=cm.jet)
+		ax3.axis('tight')
+		ax3.set_xlabel('Time(sec)')
+		ax3.set_ylabel('Frequency(kHz)')
+
+		plt.show()
+
 fftLength = 512
 overlapRatio = 0.5
-numSegs = np.floor((len(audio)-fftLength)/(fftLength*overlapRatio)) + 1
-audioSpectrogram = np.zeros((fftLength/2 + 1, numSegs))
-for idx in np.arange(0, len(audio) - fftLength, fftLength * overlapRatio):
-	audioSeg = audio[idx:idx+fftLength]	
-	audioSpectrogram[:,int(idx / (fftLength * overlapRatio))] = audioPowerSpectr(		audioSeg, samplingFreq, False)
-
-from mpl_toolkits.mplot3d import Axes3D	
-import matplotlib.cm as cm
-fig = plt.figure(1)
-ax = fig.add_subplot(111, projection='3d')
-
-
-t = np.arange(0, len(audio) - fftLength, fftLength * overlapRatio) / samplingFreq
-f = np.arange(0, fftLength/2 + 1) / float(fftLength) * samplingFreq / 1000.0
-tGrid, fGrid = np.meshgrid(t,f)
-ax.plot_surface(tGrid,fGrid, np.abs(audioSpectrogram), cmap=cm.jet, linewidth=0)
-ax.view_init(azim=-90, elev=90)
-
-fig = plt.figure(2)
-ax2 = fig.add_subplot(111)
-ax2.specgram(audio)
-ax2.axis('tight')
-
-fig = plt.figure(3)
-ax3 = fig.add_subplot(111)
-ax3.pcolormesh(tGrid,fGrid, 10*np.log10(np.abs(audioSpectrogram)), cmap=cm.jet)
-ax3.axis('tight')
-ax3.set_xlabel('Time(sec)')
-ax3.set_ylabel('Frequency(kHz)')
-
-plt.show()
-
+audioSpectrogram(audio,samplingFreq,fftLength,overlapRatio,True)
 	
 
 
