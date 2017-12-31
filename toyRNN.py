@@ -40,7 +40,7 @@ def backward(X, S, targets, W):
 	for k in range(sequenceLength, 0, -1):
 		# Compute the parameter gradients and accumulate the results
 		gU += np.sum(gS * X[:,k-1])
-		gW += np.sum(gs * S[:,k-1])
+		gW += np.sum(gS * S[:,k-1])
 		# Compute the gradient at the output of the previous layer
 		gS = gS * W
 	return gU, gW
@@ -54,7 +54,7 @@ def training(X, targets)
 	# Perform iterative gradient descent
 	for k in range(numIterations):
 		# Perform forward and backward pass to get the gradients
-		S = forward(x, parameters(0), parameters(1))
+		S = forward(X, parameters(0), parameters(1))
 		gradients = backward(X, S, targets, parameters(1))
 		# Update each parameter by u = u - (gradient * learningRate)
 		parameters = ((p - gp * learningRate)
