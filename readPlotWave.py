@@ -4,10 +4,10 @@ from scipy.io import wavfile
 
 samplingFreq, audio = wavfile.read('input.wav')
 
-print '\nShape:', audio.shape
-print 'Datatype:', audio.dtype
-print 'SamplingFrequency:', samplingFreq
-print 'Duration:', round(audio.shape[0] / float(samplingFreq), 3), 'seconds'
+print('\nShape:', audio.shape)
+print('Datatype:', audio.dtype)
+print('SamplingFrequency:', samplingFreq)
+print('Duration:', round(audio.shape[0] / float(samplingFreq), 3), 'seconds')
 
 # Normalize the audio
 audio = audio / (2.**15)
@@ -36,7 +36,7 @@ def audioPowerSpectr(audio, samplingFreq, plotEnabled):
 		transformedSignal[1:lenTransformed] *= 2
 	else:
 		transformedSignal[1:lenTransformed] *= 2
-	
+
 	# Express the power spectrum in dB
 	power = 10 * np.log10(transformedSignal)
 
@@ -52,20 +52,20 @@ def audioPowerSpectr(audio, samplingFreq, plotEnabled):
 
 
 def audioSpectrogram(audio, samplingFreq, fftLength=512, overlapRatio=0.5, plotEnabled=True):
-	# Get the power spectrum for segments of the audio	
+	# Get the power spectrum for segments of the audio
 	numSegs = np.floor((len(audio)-fftLength)/(fftLength*overlapRatio)) + 1
 	audioSpectrogram = np.zeros((fftLength/2 + 1, numSegs))
 	for idx in np.arange(0, len(audio) - fftLength, fftLength * overlapRatio):
-		audioSeg = audio[idx:idx+fftLength]	
+		audioSeg = audio[idx:idx+fftLength]
 		audioSpectrogram[:,int(idx / (fftLength * overlapRatio))] = audioPowerSpectr	(audioSeg, samplingFreq, False)
 
-	from mpl_toolkits.mplot3d import Axes3D	
-	import matplotlib.cm as cm	
+	from mpl_toolkits.mplot3d import Axes3D
+	import matplotlib.cm as cm
 
 	t = np.arange(0, len(audio) - fftLength, fftLength * overlapRatio) / samplingFreq
 	f = np.arange(0, fftLength/2 + 1) / float(fftLength) * samplingFreq / 1000.0
 	tGrid, fGrid = np.meshgrid(t,f)
-	
+
 	if False:
 		fig = plt.figure(1)
 		ax = fig.add_subplot(111, projection='3d')
@@ -90,8 +90,3 @@ def audioSpectrogram(audio, samplingFreq, fftLength=512, overlapRatio=0.5, plotE
 fftLength = 512
 overlapRatio = 0.5
 audioSpectrogram(audio,samplingFreq,fftLength,overlapRatio,True)
-	
-
-
-
-
