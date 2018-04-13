@@ -31,7 +31,7 @@ def plotWaveforms(audio, samplingFreq, fig=plt.figure()):
 
 def plotPowerSpectrum(audio, samplingFreq):
   '''Plot the audio power spectrum.'''
-  preprocessing.audioPowerSpectrum(audio, samplingFreq, plotEnabled=True)
+  preprocessing.powerSpectrum(audio, samplingFreq, plotEnabled=True)
 
 def plotSpectrogram(audio, samplingFreq):
   '''Plot the audio spectrogram.'''

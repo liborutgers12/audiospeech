@@ -50,6 +50,7 @@ Functions include
 ### Module ```preprocessing.py```: Preprocessing
 Functions include
 * overlapSegs()
-* audioPowerSpectrum()
+* powerSpectrum()
+* logPowerSpectrum()
 * audioSpectrogram()
 
