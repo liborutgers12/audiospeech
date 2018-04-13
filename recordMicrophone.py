@@ -8,13 +8,25 @@ import matplotlib.pyplot as plt
 import time
 
 def recordMicrophone(
-  nCh = 2,
-  samplingFreq = 16000,
-  maxSec = 5,
-  dType = pyaudio.paInt16,
-  lenChunk = 1024  
-):
+                      nCh = 2,
+                      samplingFreq = 16000,
+                      maxSec = 5,
+                      dType = pyaudio.paInt16,
+                      lenChunk = 1024):
+  '''Enhanced audio recorder with realtime waveform plots
+    ToDo- remove unused multiple figures
+    
+    Args:
+      nCh (int): number of channel to record
+      samplingFreq (int): the sampling frequency
+      maxSec (float): maximum recording time in secs
+      dType (pyaudio format): pyaudio format
+      lenChunk (int): chunk size read by pyaudio stream
 
+    Returns:
+      audio (numpy array): array storing the recorded audio
+      samplingFreq (int): the sampling frequency
+  '''
   def getType(dType):
     if dType == pyaudio.paInt8:
       return np.int8
@@ -73,13 +85,12 @@ def recordMicrophone(
   # stop stream (4)
   stream.stop_stream()
   stream.close()
-  # close PyAudio (5)
   p.terminate()
 
   wavfile.write('./records.wav',samplingFreq,audio)
   print('Recording terminated. Saving to records.wav.')
 
-  return audio
+  return audio, samplingFreq
 
 if __name__ == '__main__':
   recordMicrophone()
