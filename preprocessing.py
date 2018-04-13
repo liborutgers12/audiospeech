@@ -7,16 +7,18 @@ import matplotlib.cm as cm
 
 def overlapSegs(audio, lenSeg, overlapRatio=0):  
   '''Break the 1D audio into overlapping segments in 2D numpy array lenSeg*numSegs'''
+  assert(audio.ndim == 1)
   lenSkip = int(lenSeg * (1 - overlapRatio))
   numSegs = (audio.shape[0] - (lenSeg-lenSkip)) // lenSkip 
-  if audio.ndim == 1:
-    audioSegs = np.zeros(lenSeg*numSegs).reshape(lenSeg,numSegs)    
-    for n in np.arange(numSegs):
-      idxs = np.arange(lenSeg)+n*lenSkip
-      audioSegs[:, n] = audio[idxs]
+  
+  audioSegs = np.zeros(lenSeg*numSegs).reshape(lenSeg,numSegs)    
+  for n in np.arange(numSegs):
+    idxs = np.arange(lenSeg)+n*lenSkip
+    audioSegs[:, n] = audio[idxs]
   return audioSegs
 
 def audioPowerSpectrum(audio, samplingFreq, plotEnabled=False):
+  '''The audio power spectrum'''
   assert(audio.ndim==1)
   lenAudio = audio.shape[0]
 	# Apply Fourier transform

@@ -38,6 +38,7 @@ def plotSpectrogram(audio, samplingFreq):
   preprocessing.audioSpectrogram(audio, samplingFreq, plotEnabled=True)
 
 def playBack(audio, samplingFreq):
+  '''Play back audio from numpy array, based on pyaudio'''
   audio = audio.astype(np.float32)
   # instantiate PyAudio (1)
   p = pyaudio.PyAudio()
@@ -58,6 +59,7 @@ def playBack(audio, samplingFreq):
   p.terminate()
 
 def playBackFile(fileName):
+  '''Play back audio file along with summary information, based on pyaudio'''
   samplingFreq, audio = wavfile.read(fileName, 'rb')
   audio = audio / np.amax(np.abs(audio))
   audio = audio.astype(np.float32)
