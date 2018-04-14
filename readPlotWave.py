@@ -32,4 +32,4 @@ if audio.ndim > 1:
 	audio1CH = audio[:,0]
 else:
 	audio1CH = audio
-preprocessing.audioSpectrogram(audio1CH,samplingFreq,fftLength,overlapRatio,True)
+preprocessing.spectrogram(audio1CH,samplingFreq,fftLength,overlapRatio,'HAMMING',True)
